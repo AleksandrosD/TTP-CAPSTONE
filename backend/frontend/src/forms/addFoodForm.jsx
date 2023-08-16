@@ -27,10 +27,18 @@ export default function AddFoodForm({ hModal, fCategories }) {
 
   const handleAddCategoryFormSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if any required field is empty
+    if (!foodData.name.trim() || !foodData.price || !foodData.FoodCategoryId) {
+      alert("All fields must be filled out!");
+      return;
+    }
+
     hModal();
     const preparedFoods = {
       ...foodData,
     };
+
     const response = await fetch(
       `/api/restaurant/foodCategories/${foodData.FoodCategoryId}/foods`,
       {
@@ -41,6 +49,7 @@ export default function AddFoodForm({ hModal, fCategories }) {
         body: JSON.stringify(preparedFoods),
       }
     );
+
     const newFood = await response.json();
     console.log(newFood);
 
@@ -49,9 +58,7 @@ export default function AddFoodForm({ hModal, fCategories }) {
 
   return (
     <div>
-      <form
-        className="selection:bg-blue-200 flex flex-col gap-2 text-center"
-      >
+      <form className="selection:bg-blue-200 flex flex-col gap-2 text-center">
         <h1 className="text-3xl">Add a Food!</h1>
 
         <fieldset className="flex flex-col">
@@ -78,7 +85,7 @@ export default function AddFoodForm({ hModal, fCategories }) {
           />
         </fieldset>
 
-        {fCategories && fCategories.length > 0 ? ( // Check if fCategories is defined and not empty
+        {fCategories && fCategories.length > 0 ? (
           <fieldset className="flex flex-col">
             <label htmlFor="FoodCategoryId">Food Category</label>
             <select

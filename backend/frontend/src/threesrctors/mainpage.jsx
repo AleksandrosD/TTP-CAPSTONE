@@ -83,18 +83,18 @@ export default function Main() {
               animationFillMode: "forwards",
             }}
           >
-            <button className="bg-white text-black px-6 py-2 rounded-lg font-semibold mr-2">
-              <Link to="/login" className="text-red-500">
+            <button className="bg-white text-red-500 px-6 py-2 rounded-lg font-semibold mr-2 hover:bg-red-500 hover:text-white hover:duration-300">
+              <Link to="/login">
                 Log In
               </Link>
             </button>
-            <button className="bg-white text-black px-6 py-2 rounded-lg font-semibold mr-2">
-              <Link to="/signup" className="text-red-500">
+            <button className="bg-white text-red-500 px-6 py-2 rounded-lg font-semibold mr-2 hover:bg-red-500 hover:text-white hover:duration-300">
+              <Link to="/signup">
                 Sign Up
               </Link>
             </button>
-            <button className="bg-white text-black px-6 py-2 rounded-lg font-semibold">
-              <a href="/how-to-use" className="text-red-500">
+            <button className="bg-white text-red-500 px-6 py-2 rounded-lg font-semibold hover:bg-red-500 hover:text-white hover:duration-300">
+              <a href="/how-to-use">
                 How to Use
               </a>
             </button>

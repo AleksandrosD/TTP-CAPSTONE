@@ -378,7 +378,7 @@ router.get('/partyOrders/:rTableId', async (req, res) => {
             include: [
                 {
                     model: Food,
-                    attributes: ['price', 'name'],
+                    attributes: ['id', 'price', 'name'],
                     through: {
                         attributes: ['Quantity']
                     }
@@ -557,9 +557,76 @@ router.post('/orderFoods', async (req, res) => {
     }
 });
 
+//deleting an order
+router.delete('/orderFoods/:foodId/:partyOrderId', async (req, res) => {
+    const foodId = req.params.foodId;
+    const partyOrderId = req.params.partyOrderId;
+
+    try {
+        const orderFood = await Order_Food.findOne({
+            where: {
+                FoodId: foodId,
+                PartyOrderId: partyOrderId,
+            },
+        });
+
+        if (!orderFood) {
+            return res.status(404).json({ message: 'Order food not found' });
+        }
+
+        const food = await Food.findByPk(foodId);
+        if (!food) {
+            return res.status(404).json({ message: 'Food not found' });
+        }
+
+        const partyOrder = await Party_Order.findByPk(partyOrderId);
+        if (!partyOrder) {
+            return res.status(404).json({ message: 'Party order not found' });
+        }
+
+        // Check if the Party_Order is open
+        if (!partyOrder.open) {
+            return res.status(400).json({ message: 'Cannot delete Order_Food for a closed party order' });
+        }
+
+        const foodPrice = food.price * orderFood.Quantity;
+
+        // Update the total price in the Party_Order table
+        const newTotal = partyOrder.Total - foodPrice;
+        await partyOrder.update({ Total: newTotal });
+
+        await orderFood.destroy();
+
+        res.status(200).json({ message: 'Order food deleted successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error occurred while deleting order food', error: err });
+    }
+});
+
+  
 
 // ---------- Daily Report ---------- //
 
+// Get all dailyReports data for a specific RestaurantId
+router.get('/dailyReports/:restaurantId', async (req, res) => {
+    const { restaurantId } = req.params;
+  
+    try {
+      const dailyReports = await DailyReport.findAll({
+        where: {
+          RestaurantId: restaurantId,
+        },
+      });
+  
+      res.status(200).json(dailyReports);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching dailyReports data', error: error });
+    }
+  });
+
+//post a dailyReport every day
 const createDailyReport = async (restaurantId, date) => {
     try {
         const newReport = await DailyReport.create({

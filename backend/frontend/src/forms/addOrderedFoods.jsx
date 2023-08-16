@@ -3,7 +3,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-// eslint-disable-next-line no-unused-vars
 export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdded }) {
   // eslint-disable-next-line no-unused-vars
   const [foodsInCategory, setFoodsInCategory] = useState(foods);
@@ -21,9 +20,15 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
   console.log(foods);
 
   const handleAddClick = async () => {
+
+    if (!partyOrderId) {
+      alert("Can't add food if there are no Orders. Cannot add food.");
+      return;
+    }
+
     const orderFoods = [];
     const selectedFoods = [];
-  
+
     for (const foodId in foodQuantities) {
       if (foodQuantities[foodId] > 0) {
         orderFoods.push({
@@ -37,9 +42,10 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
     for (const foodId in foodQuantities) {
       if (foodQuantities[foodId] > 0) {
         const selectedFood = foodsInCategory.find(food => food.id === parseInt(foodId));
-  
+
         if (selectedFood) {
           selectedFoods.push({
+            foodId: selectedFood.id,
             name: selectedFood.name,
             price: selectedFood.price,
             quantity: foodQuantities[foodId],
@@ -47,7 +53,7 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
         }
       }
     }
-  
+
     if (orderFoods.length === 0) {
       return;
     }
@@ -55,7 +61,7 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
     if (selectedFoods.length === 0) {
       return;
     }
-  
+
     try {
       const response = await fetch('/api/restaurant/orderFoods', {
         method: 'POST',
@@ -64,14 +70,14 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
         },
         body: JSON.stringify({ orderFoods }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         setTotalFoodPrice(data.totalFoodPrice || 0);
         setFoodQuantities({});
         handleFoodAdded(selectedFoods);
         hModal();
-  
+
       } else {
         console.error('Error adding order foods:', response.statusText);
       }
@@ -79,7 +85,7 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
       console.error('Error adding order foods:', error);
     }
   };
-  
+
 
   return (
     <div className="py-5">

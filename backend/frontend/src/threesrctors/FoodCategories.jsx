@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function FoodCategories({ fCategories, onDelete, onClick }) {
   const handleDelete = () => {
@@ -21,21 +23,22 @@ export default function FoodCategories({ fCategories, onDelete, onClick }) {
   };
 
   return (
-    <div className="flex flex-row justify-center items-center relative">
-  <button
-    className="bg-gray-300 hover:bg-gray-400 w-full py-6 my-1 px-10 rounded"
-    onClick={handleCategoryClick}
-  >
-    {fCategories.type}
-  </button>
-  <button
-    className="absolute top-0 right-0 text-red-600 hover:text-red-800 font-bold py-1 px-2 rounded"
-    onClick={handleDelete}
-  >
-   X
-  </button>
-</div>
-
+    <div className="relative transition transform hover:-translate-y-1 duration-200 ease-in-out">
+      <div className="relative flex justify-center items-center">
+        <button
+          className="border-2 border-red-600 w-full py-6 my-1 px-10 rounded relative"
+          onClick={handleCategoryClick}
+        >
+          {fCategories.type}
+          <button
+            className="absolute top-0 right-0 text-red-600 hover:text-red-800 font-bold py-1 px-2 rounded"
+            onClick={handleDelete}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </button>
+      </div>
+    </div>
   );
 }
 

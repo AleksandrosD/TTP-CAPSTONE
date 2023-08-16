@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
-const port = 4000;
+// const port = 4000;
 const path = require("path");
 const env = process.env.NODE_ENV || "development";
 const session = require("express-session");
 if (env === "development") {
   require("dotenv").config();
 }
-// const cors = require("cors");
+const cors = require("cors");
 
 require("dotenv").config();
 

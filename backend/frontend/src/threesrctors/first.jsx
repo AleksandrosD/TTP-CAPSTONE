@@ -3,7 +3,7 @@ import Table from "./Table";
 
 // eslint-disable-next-line react/prop-types
 export default function First({ onTableClick }) {
-  const [ tables,setTables ] = useState([]);
+  const [tables, setTables] = useState([]);
   const [tableData, setTableData] = useState({});
   const [sortedTables, setSortedTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
@@ -12,9 +12,9 @@ export default function First({ onTableClick }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-       
+
         const tablesRespond = await fetch("/api/restaurant/rTables");
-       
+
         if (tablesRespond.ok) {
           const tablesData = await tablesRespond.json();
           setTables(tablesData);
@@ -57,7 +57,7 @@ export default function First({ onTableClick }) {
         });
     };
 
-    
+
     const addButton = document.getElementById("addTableButton");
     addButton.addEventListener("click", handleAddTable);
 

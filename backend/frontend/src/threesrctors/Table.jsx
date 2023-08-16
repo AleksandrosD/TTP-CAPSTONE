@@ -6,11 +6,10 @@ export default function Table({ table, onDelete, onClick, highlighted }) {
     onDelete(table.id);
   };
 
-
   return (
     <div className="flex justify-center items-center">
       <div >
-        <button className={`w-full py-2 my-1 px-10 rounded ${highlighted ? 'bg-red-600 text-white' : 'bg-gray-300 hover:bg-gray-400'
+        <button className={`w-full py-2 my-1 px-10 rounded ${highlighted ? 'bg-red-600 text-white' : 'border border-red-500 text-gray-950 hover:bg-red-400 hover:text-white hover:delay-75'
           }`}
           onClick={onClick}
         >

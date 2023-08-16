@@ -1,13 +1,12 @@
-import { Form,Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-
-
-
 
 export default function LoginForm() {
   const { currentUser, login } = useContext(AuthContext);
   const [loginError, setLoginError] = useState(false); // State to track login error
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   if (currentUser) {
     return <Navigate to="/user" />;
@@ -15,8 +14,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const credentials = Object.fromEntries(formData);
+    const credentials = { email, password };
     const loginSuccess = await login(credentials);
 
     if (!loginSuccess) {
@@ -24,48 +22,75 @@ export default function LoginForm() {
     }
   };
 
-  return (
-    <div className="flex flex-col items-center h-screen bg-[#f1f1f1]">
-      <img className="mt-8" src="/logo.png" alt="Runner Logo" />
-      <div className="mt-4 w-96"></div>
-      <div>
-        <form
-          method="post"
-          className="flex flex-col gap-2 w-96 text-center"
-          onSubmit={handleSubmit}
-        >
-          <fieldset className="flex flex-col">
-            <label htmlFor="title">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setLoginError(false); // Clear login error when email changes
+  };
 
-          <fieldset className="flex flex-col">
-            <label htmlFor="title">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <button className="bg-gray-300 hover:bg-gray-400 text-white font-bold py-2 px-4 mt-4 rounded-full">
-            Login
-          </button>
-        </form>
-        {loginError && (
-          <p className="mt-2 text-red-500 text-center">Wrong Credentials</p>
-        )}
-        <p className="mt-4 text-center">
-          Don't have an account yet?{' '}
-          <Link to="/signup" className="text-red-500">
-            Sign Up
-          </Link>{' '}
-        </p>
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setLoginError(false); // Clear login error when password changes
+  };
+
+  const isFormValid = email !== "" && password !== "";
+
+  return (
+    <div className="flex items-center justify-center h-screen font-serif">
+      <div className="w-1/2 p-4">
+        <img className="w-fit" src="/1.jpg" alt="Image" />
+      </div>
+      <div className="w-fit p-4">
+        <img className="mx-auto" src="/logo.png" alt="Runner Logo" />
+        <div className="w-96 mx-auto mb-20">
+          <form
+            method="post"
+            className="flex flex-col gap-2 w-full text-center"
+            onSubmit={handleSubmit}
+          >
+            <fieldset className="flex flex-col mb-3">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+                className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+              />
+            </fieldset>
+
+            <fieldset className="flex flex-col mb-3">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={handlePasswordChange}
+                className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+              />
+            </fieldset>
+            <button
+              className={`${isFormValid
+                ? "bg-red-500 hover:bg-red-600 hover:duration-300"
+                : "bg-gray-300"
+                } text-white font-bold py-2 px-4 mt-4 rounded-full`}
+              style={isFormValid ? {} : { cursor: "not-allowed" }}
+              disabled={!isFormValid}
+            >
+              Login
+            </button>
+          </form>
+          {loginError && (
+            <p className="mt-2 text-red-500 text-center">Wrong Credentials</p>
+          )}
+          <p className="mt-4 text-center">
+            Don&apos;t have an account yet?{' '}
+            <Link to="/signup" className="text-blue-800">
+              Sign Up
+            </Link>{' '}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -6,43 +6,43 @@ import AddOrderedFood from "../forms/addOrderedFoods";
 import Modal from "../ui/modal";
 
 // eslint-disable-next-line react/prop-types
-export default function Second({ partyOrderId, isOrderStarted, handleOrderToggle, handleFoodAdded, tableHasPartyOrder }) {
-  const [ fCategories,setFCategory ] = useState([]);
+export default function Second({ partyOrderId, isOrderStarted, handleOrderToggle, handleFoodAdded, selectedTableId, tableHasPartyOrder }) {
+  const [fCategories, setFCategory] = useState([]);
   const [categoryData, setCategoryData] = useState({});
   const [sortedCategories, setSortedCategories] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddFoodModalVisible, setIsAddFoodModalVisible] = useState(false);
   const [isAddOFModalVisible, setIsAddOFModalVisible] = useState(false);
   const [foodsInSelectedCategory, setFoodsInSelectedCategory] = useState([]);
-//////////////////////////////////////////////////////
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const foodCategoriesRespond = await fetch("/api/restaurant/foodCategories");
-      if (foodCategoriesRespond.ok) {
-        const fC = await foodCategoriesRespond.json();
-        setFCategory(fC);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const foodCategoriesRespond = await fetch("/api/restaurant/foodCategories");
+        if (foodCategoriesRespond.ok) {
+          const fC = await foodCategoriesRespond.json();
+          setFCategory(fC);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+    };
 
-  fetchData(); // Fetch data when component mounts
+    fetchData(); // Fetch data when component mounts
 
-  const addFoodButton = document.getElementById("addFood");
+    const addFoodButton = document.getElementById("addFood");
 
-  const handleAddFoodClick = () => {
-    fetchData(); // Fetch data when the addFood button is clicked
-  };
+    const handleAddFoodClick = () => {
+      fetchData(); // Fetch data when the addFood button is clicked
+    };
 
-  addFoodButton.addEventListener("click", handleAddFoodClick);
+    addFoodButton.addEventListener("click", handleAddFoodClick);
 
-  return () => {
-    addFoodButton.removeEventListener("click", handleAddFoodClick);
-  };
-}, []);
-///////////////////////////////////////////////////////
+    return () => {
+      addFoodButton.removeEventListener("click", handleAddFoodClick);
+    };
+  }, []);
+
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -154,14 +154,17 @@ useEffect(() => {
         throw new Error("Network response was not ok");
       }
       const foods = await response.json();
-      console.log(foods);
-      setFoodsInSelectedCategory(foods);
-      showAddOrderedFood();
+
+      if (foods.length > 0) {
+        setFoodsInSelectedCategory(foods);
+        showAddOrderedFood();
+      } else {
+        alert("No foods available in this category.");
+      }
     } catch (error) {
       console.error("Error fetching foods:", error);
     }
-  };
-
+  }
 
   const renderCategories = sortedCategories.map((category) => (
     <FoodCategories
@@ -171,7 +174,7 @@ useEffect(() => {
       onClick={() => handleCategoryClick(category.id)}
     />
   ));
-  
+
   return (
     <div className="flex flex-col h-[80vh] items-center justify-center py-15 shadow-md shadow-black/5">
       <div className="grid grid-cols-5 gap-4 mx-auto mb-auto overflow-y-auto">
@@ -197,7 +200,7 @@ useEffect(() => {
 
       <div className="flex">
         <button
-        id="addFood"
+          id="addFood"
           className="bg-white hover:bg-red-600 hover:border-red-600 hover:text-white text-red-600 font-bold py-1 px-6 mb-4 mr-4 rounded-full border border-red-600"
           onClick={showAddFoodModal}
         >
@@ -212,7 +215,7 @@ useEffect(() => {
           Add Menu Category
         </button>
 
-        {!isOrderStarted && !tableHasPartyOrder ? (
+        {!isOrderStarted && !tableHasPartyOrder && selectedTableId !== null ? (
           <button
             className="bg-white hover:bg-red-600 hover:border-red-600 hover:text-white text-red-600 font-bold py-1 px-6 mb-4 ml-4 rounded-full border border-red-600"
             onClick={handleOrderToggle}

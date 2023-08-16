@@ -5,23 +5,24 @@
 @import "tailwindcss/utilities";
 
 #error-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    font-size:xx-large;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: xx-large;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  to {
+    opacity: 1;
   }
-  
-  .animate-fade-in {
-    animation: fadeIn 1s ease;
-  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease;
+}
