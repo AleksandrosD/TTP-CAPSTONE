@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 4000;
+const path = require("path");
 const session = require("express-session");
 require("dotenv").config();
 const cors = require("cors");
@@ -51,4 +52,13 @@ app.use("/api/restaurant", restaurantRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
+});
+
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+});
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running at http://localhost:${process.env.PORT}`);
 });
