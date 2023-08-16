@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const port = 4000;
+//const port = 4000;
 const path = require("path");
+const env = process.env.NODE_ENV || "development";
 const session = require("express-session");
-require("dotenv").config();
+if (env === "development") {
+  require("dotenv").config();
+}
 const cors = require("cors");
 
 const authRouter = require("./routes/auth");
@@ -50,9 +53,9 @@ app.use(notFoundErrorHandler);
 app.use("/api/auth", authRouter);
 app.use("/api/restaurant", restaurantRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running at http://localhost:${port}`);
+// });
 
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
