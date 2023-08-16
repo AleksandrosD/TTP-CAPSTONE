@@ -2,6 +2,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdded }) {
   // eslint-disable-next-line no-unused-vars
@@ -16,8 +18,6 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
       [food.id]: Math.max((prevQuantities[food.id] || 0) + changeAmount, 0),
     }));
   };
-
-  console.log(foods);
 
   const handleAddClick = async () => {
 
@@ -86,35 +86,57 @@ export default function AddFoodForm({ hModal, foods, partyOrderId, handleFoodAdd
     }
   };
 
+  const handledeleteclick = async (food) => {
+    try {
+      const response = await fetch(`/api/restaurant/foodCategories/${food.FoodCategoryId}/foods/${food.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Update foodsInCategory by removing the deleted food item
+        setFoodsInCategory((prevFoods) => prevFoods.filter((prevFood) => prevFood.id !== food.id));
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error deleting food:', error);
+    }
+  };
 
   return (
     <div className="py-5">
       <h1 className="text-center text-2xl p-4">Foods in Selected Category</h1>
       <div className="mx-auto">
-        <div className="grid grid-cols-3 gap-x-48">
-          <h1 className="col-span-1">Name</h1>
-          <h1 className="col-span-1">Price</h1>
-          <h1 className="col-span-1">Quantity</h1>
+        <div className="grid grid-cols-4 gap-x-4">
+          <h1 className="">Delete Food</h1>
+          <h1 className="">Name</h1>
+          <h1 className="">Price</h1>
+          <h1 className="">Quantity</h1>
         </div>
         <hr className="mt-4 mb-4 w-full border-solid border-t-2 border-gray-300" />
         {foodsInCategory.map((food) => (
-          <div className="mt-5 grid grid-cols-3 gap-x-48 ml-2" key={food.id}>
-            <h1 className="col-span-1">{food.name}</h1>
-            <h1 className="col-span-1">{food.price}</h1>
-            <div className="col-span-1 flex items-center">
+          <div className="grid grid-cols-4 gap-x-4 items-center" key={food.id}>
+            <div className="flex items-center">
               <button
-                onClick={() => handleQuantityChange(food, -1)}
-                className="px-1"
+                className="text-red-600 hover:text-red-800 font-bold"
+                onClick={() => handledeleteclick(food)}
               >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+            <h1 className="">{food.name}</h1>
+            <h1 className="">{food.price}</h1>
+            <div className="flex items-center">
+              <button onClick={() => handleQuantityChange(food, -1)} className="px-1">
                 -
               </button>
               <span className="px-2">
                 {foodQuantities[food.id] !== undefined ? foodQuantities[food.id] : 0}
               </span>
-              <button
-                onClick={() => handleQuantityChange(food, 1)}
-                className="px-1"
-              >
+              <button onClick={() => handleQuantityChange(food, 1)} className="px-1">
                 +
               </button>
             </div>

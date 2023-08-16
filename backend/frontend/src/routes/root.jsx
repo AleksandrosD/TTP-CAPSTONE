@@ -85,7 +85,7 @@ function Root() {
 
       const partyOrder = await response.json();
       console.log(partyOrder);
-      
+
       if (partyOrder) {
         setPartyOrderId(partyOrder.id);
         setPartyTotal(partyOrder.Total);
@@ -213,9 +213,9 @@ function Root() {
 
   const handleFoodRemoved = (foodToRemove) => {
     const updatedFood = orderedFood.filter(existingFood => existingFood.name !== foodToRemove.name);
-  
+
     setOrderedFood(updatedFood);
-  
+
     const newPartyTotal = updatedFood.reduce((total, food) => total + (food.price * food.quantity), 0);
     setPartyTotal(newPartyTotal);
   };
@@ -240,7 +240,6 @@ function Root() {
     fetchCurrentUser();
   }, []);
 
-  console.log(orderedFood);
 
   return (
     <div>
@@ -286,14 +285,14 @@ function Root() {
 
 
       <div className="grid grid-cols-7 gap-4 m-4 ">
-        <div className="w-auto p-2 rounded col-span-1">
+        <div className="w-auto p-2 rounded col-span-1 border border-gray-300">
           <h1 className="text-2xl text-center mt-2">Tables</h1>
           <hr className="mt-4 mb-10 w-full border-solid border-t-2 border-gray-300" />
           <First
             onTableClick={handleTableClick}
           />
         </div>
-        <div className="w-auto p-2 rounded col-span-4">
+        <div className="w-auto p-2 rounded col-span-4 border border-gray-300">
           <h1 className="text-2xl text-center mt-2">Food Categories</h1>
           <hr className="mt-4 mb-10 w-full border-solid border-t-2 border-gray-300" />
           <Second
@@ -305,8 +304,9 @@ function Root() {
             tableHasPartyOrder={tableHasPartyOrder}
           />
         </div>
-        <div className="w-auto p-2 rounded col-span-2">
-          <div className="grid grid-cols-3 mt-4">
+        <div className="w-auto p-2 rounded col-span-2 border border-gray-300">
+          <div className="grid grid-cols-4 mt-4">
+            <h1 className="mx-auto col-span-1">Delete Order</h1>
             <h1 className="mx-auto col-span-1">Item</h1>
             <h1 className="mx-auto col-span-1">Quantity</h1>
             <h1 className="mx-auto col-span-1">Price</h1>

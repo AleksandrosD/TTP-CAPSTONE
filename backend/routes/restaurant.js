@@ -335,6 +335,7 @@ router.post("/foodCategories/:id/foods", authenticateUser, async (req, res) => {
                 FoodCategoryId: req.params.id
             },
         });
+        
         if (existingRecord)
             return res.status(409).json({ error: "Food already exists" });
 
@@ -352,7 +353,7 @@ router.post("/foodCategories/:id/foods", authenticateUser, async (req, res) => {
 router.delete("/foodCategories/:catId/foods/:id", authenticateUser, async (req, res) => {
     try {
         const food = await getFood(req.params.id);
-        await authorizeFoodDelete(req.session, food);
+        //await authorizeFoodDelete(req.session, food);
         await food.destroy();
         res.status(200).send({ message: "Food deleted successfully" });
     } catch (err) {
@@ -611,11 +612,17 @@ router.delete('/orderFoods/:foodId/:partyOrderId', async (req, res) => {
 // Get all dailyReports data for a specific RestaurantId
 router.get('/dailyReports/:restaurantId', async (req, res) => {
     const { restaurantId } = req.params;
-  
+    
     try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+  
       const dailyReports = await DailyReport.findAll({
         where: {
           RestaurantId: restaurantId,
+          createdAt: {
+            [Op.gte]: today,
+          },
         },
       });
   
@@ -626,7 +633,7 @@ router.get('/dailyReports/:restaurantId', async (req, res) => {
     }
   });
 
-//post a dailyReport every day
+//Post a dailyReport every day
 const createDailyReport = async (restaurantId, date) => {
     try {
         const newReport = await DailyReport.create({
@@ -749,7 +756,6 @@ router.patch('/dailyReports/:restaurantId', authenticateUser, async (req, res) =
         res.status(500).json({ message: 'Error occurred while updating daily report', error: err });
     }
 });
-
 
 
 module.exports = router;

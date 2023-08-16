@@ -27,7 +27,7 @@ export default function SignupForm() {
   const isFormValid = username !== "" && rName !== "" && email !== "" && password !== "";
 
   return (
-    <div className="flex items-center justify-center h-screen font-serif">
+    <div className="flex items-center justify-center h-screen">
       <div className="w-1/2 p-4">
         <img className="w-full" src="/2.jpg" alt="Image" />
       </div>
@@ -54,7 +54,7 @@ export default function SignupForm() {
                   name="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                  className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
               <fieldset className="flex flex-col mb-2">
@@ -65,7 +65,7 @@ export default function SignupForm() {
                   name="rName"
                   value={rName}
                   onChange={(e) => setRestaurantName(e.target.value)}
-                  className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                  className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
               <fieldset className="flex flex-col mb-2">
@@ -76,7 +76,7 @@ export default function SignupForm() {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                  className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
               <fieldset className="flex flex-col mb-2">
@@ -87,12 +87,12 @@ export default function SignupForm() {
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                  className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
               <button
                 className={`${isFormValid
-                    ? "bg-blue-500 hover:bg-blue-600"
+                    ? "bg-red-500 hover:bg-red-600"
                     : "bg-gray-300"
                   } text-white font-bold py-2 px-4 mt-4 rounded-full`}
                 style={{ border: "none" }}
@@ -103,7 +103,7 @@ export default function SignupForm() {
             </form>
             <p className="mt-4 text-center">
               Already a member?{" "}
-              <Link to="/login" className="text-blue-800">
+              <Link to="/login" className="text-blue-800 underline">
                 Login
               </Link>{" "}
             </p>

@@ -142,16 +142,17 @@ function Report() {
             dailyReports.map((report, index) => (
               <div key={index} className="flex gap-4 justify-center items-center">
                 <p>Date: {report.date}</p>
-                <p>Party Order Total: {report.partyOrderTotal}</p>
+                <p>Party Orders Total: {report.partyOrderTotal}</p>
                 <p>Employee Cost: {report.eCost}</p>
                 <p>Supply Cost: {report.sCost}</p>
                 <p>Net Profit: {report.partyOrderTotal - report.eCost - report.sCost}</p>
               </div>
             ))
           ) : (
-            <p>No daily reports available</p>
+            <p>No daily report available</p>
           )}
         </div>
+        
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export default function LoginForm() {
   const isFormValid = email !== "" && password !== "";
 
   return (
-    <div className="flex items-center justify-center h-screen font-serif">
+    <div className="flex items-center justify-center h-screen">
       <div className="w-1/2 p-4">
         <img className="w-fit" src="/1.jpg" alt="Image" />
       </div>
@@ -55,7 +55,7 @@ export default function LoginForm() {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                className="bg-white border-2 border-gray-950 focus:outline-none p-2"
               />
             </fieldset>
 
@@ -67,7 +67,7 @@ export default function LoginForm() {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
-                className="bg-white border-4 border-gray-950 focus:outline-none p-2"
+                className="bg-white border-2 border-gray-950 focus:outline-none p-2"
               />
             </fieldset>
             <button
@@ -86,7 +86,7 @@ export default function LoginForm() {
           )}
           <p className="mt-4 text-center">
             Don&apos;t have an account yet?{' '}
-            <Link to="/signup" className="text-blue-800">
+            <Link to="/signup" className="text-blue-800 underline">
               Sign Up
             </Link>{' '}
           </p>
