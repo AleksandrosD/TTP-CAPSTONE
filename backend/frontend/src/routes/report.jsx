@@ -128,6 +128,10 @@ function Report() {
     }
   };
 
+  
+  const nextDay = new Date(dailyReports.date);
+  nextDay.setDate(dailyReports.date.getDate() + 1);
+
   return (
     <div>
       <nav className="flex-no-wrap relative flex w-full items-center justify-between ">
@@ -181,7 +185,7 @@ function Report() {
             dailyReports.map((report, index) => (
               <div key={index} className="grid">
                 <div className="flex gap-4 justify-center items-center text-xl">
-                  <p>Date: {report.date.toLocaleString()}</p>
+                  <p>Date: {new Date(report.date).toLocaleDateString()}</p>
                   <p>Party Orders Total: {report.partyOrderTotal}</p>
                   <p>Employee Cost: {report.eCost}</p>
                   <p>Supply Cost: {report.sCost}</p>
