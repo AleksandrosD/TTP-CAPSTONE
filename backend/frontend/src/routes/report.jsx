@@ -128,6 +128,8 @@ function Report() {
     }
   };
 
+  const currentDate = new Date(Date.now());
+  const formattedDate = currentDate.toLocaleDateString();
 
   return (
     <div>
@@ -182,7 +184,7 @@ function Report() {
             dailyReports.map((report, index) => (
               <div key={index} className="grid">
                 <div className="flex gap-4 justify-center items-center text-xl">
-                  <p>Date: {Date.now()} </p>
+                  <p>Date: {formattedDate} </p>
                   <p>Party Orders Total: {report.partyOrderTotal}</p>
                   <p>Employee Cost: {report.eCost}</p>
                   <p>Supply Cost: {report.sCost}</p>
