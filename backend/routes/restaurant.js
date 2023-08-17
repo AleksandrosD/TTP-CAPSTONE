@@ -686,21 +686,26 @@ const scheduleDailyReportsForRestaurants = async () => {
 };
 
 router.post("/dailyReports", authenticateUser, async (req, res) => {
-    const now = new Date();
-    const scheduledTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    
-    const existingReport = await DailyReport.findOne({
-        where: {
-            RestaurantId: req.user.RestaurantId,
-            date: scheduledTime,
-        },
-    });
+    try {
+        const now = new Date();
+        const scheduledTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        
+        const existingReport = await DailyReport.findOne({
+            where: {
+                RestaurantId: req.user.RestaurantId,
+                date: scheduledTime,
+            },
+        });
 
-    if (!existingReport) {
-        createDailyReport(req.user.RestaurantId, scheduledTime);
+        if (!existingReport) {
+            await createDailyReport(req.user.RestaurantId, scheduledTime);
+        }
+        
+        return res.status(201).json({ message: 'Daily report creation initiated' });
+    } catch (error) {
+        console.error('Error creating daily report:', error.message);
+        return res.status(500).json({ message: 'Error creating daily report' });
     }
-    
-    return res.status(201).json({ message: 'Daily report creation initiated' });
 });
 
 // Start scheduling the daily reports for each restaurant
