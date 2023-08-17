@@ -173,7 +173,7 @@ function Report() {
 
       <div className="mt-60">
         <div>
-          <h1 className="text-center text-5xl mt-8 text-red-600">Daily Reports</h1>
+          <h1 className="text-center text-5xl mt-8 text-red-600">Daily Report</h1>
           <hr className="mt-4 w-1/2 mx-auto border-solid border-t-2 border-gray-300" />
         </div>
         <div>
@@ -181,7 +181,7 @@ function Report() {
             dailyReports.map((report, index) => (
               <div key={index} className="grid">
                 <div className="flex gap-4 justify-center items-center text-xl">
-                  <p>Date: {new Date(report.date).toLocaleDateString()}</p>
+                  <p>Date: {report.date.toLocaleString()}</p>
                   <p>Party Orders Total: {report.partyOrderTotal}</p>
                   <p>Employee Cost: {report.eCost}</p>
                   <p>Supply Cost: {report.sCost}</p>
