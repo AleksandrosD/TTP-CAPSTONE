@@ -88,7 +88,45 @@ function Report() {
     })();
   }, []);
 
-  console.log(dailyReports);
+  const handleEditECost = async (reportIndex, newECost) => {
+    try {
+      const response = await fetch(`/api/restaurant/dailyReports/${currentUser.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ eCost: newECost }),
+      });
+
+      if (response.ok) {
+        const updatedReports = [...dailyReports];
+        updatedReports[reportIndex].eCost = newECost;
+        setDailyReports(updatedReports);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditSCost = async (reportIndex, newSCost) => {
+    try {
+      const response = await fetch(`/api/restaurant/dailyReports/${currentUser.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sCost: newSCost }),
+      });
+
+      if (response.ok) {
+        const updatedReports = [...dailyReports];
+        updatedReports[reportIndex].sCost = newSCost;
+        setDailyReports(updatedReports);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -132,28 +170,78 @@ function Report() {
         </style>
       </nav>
 
-      <div>
+
+      <div className="mt-60">
         <div>
-          <h1 className="text-center text-5xl mt-8">Daily Reports</h1>
-          <hr className="mt-4 mb-10 w-1/2 mx-auto border-solid border-t-2 border-gray-300" />
+          <h1 className="text-center text-5xl mt-8 text-red-600">Daily Reports</h1>
+          <hr className="mt-4 w-1/2 mx-auto border-solid border-t-2 border-gray-300" />
         </div>
         <div>
           {Array.isArray(dailyReports) && dailyReports.length > 0 ? (
             dailyReports.map((report, index) => (
-              <div key={index} className="flex gap-4 justify-center items-center">
-                <p>Date: {report.date}</p>
-                <p>Party Orders Total: {report.partyOrderTotal}</p>
-                <p>Employee Cost: {report.eCost}</p>
-                <p>Supply Cost: {report.sCost}</p>
-                <p>Net Profit: {report.partyOrderTotal - report.eCost - report.sCost}</p>
+              <div key={index} className="grid">
+                <div className="flex gap-4 justify-center items-center text-xl">
+                  <p>Date: {new Date(report.date).toLocaleDateString()}</p>
+                  <p>Party Orders Total: {report.partyOrderTotal}</p>
+                  <p>Employee Cost: {report.eCost}</p>
+                  <p>Supply Cost: {report.sCost}</p>
+                  <p>Net Profit: {report.partyOrderTotal - report.eCost - report.sCost}</p>
+                </div>
+                <div className="grid text-center mt-10 text-xl mx-auto">
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      const newECost = parseFloat(e.target.elements.eCost.value);
+                      await handleEditECost(index, newECost);
+                      e.target.elements.eCost.value = 0; // Reset the input to 0
+                    }}
+                    className="mb-5"
+                  >
+                    <label>
+                      Edit Employee Cost:
+                      <input
+                        className="text-center border border-black rounded mx-5"
+                        type="number"
+                        name="eCost"
+                        defaultValue={0}
+                        step="1"
+                        min="0"
+                      />
+                    </label>
+                    <button className="px-3 py-1 border-2 border-red-600 text-center hover:bg-red-600 hover:text-white rounded" type="submit">Update</button>
+                  </form>
+
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      const newSCost = parseFloat(e.target.elements.sCost.value);
+                      await handleEditSCost(index, newSCost);
+                      e.target.elements.sCost.value = 0; // Reset the input to 0
+                    }}
+                    className="mb-5 ml-7"
+                  >
+                    <label>
+                      Edit Supply Cost:
+                      <input
+                        className="text-center border border-black rounded mx-5"
+                        type="number"
+                        name="sCost"
+                        defaultValue={0}
+                        step="1"
+                        min="0"
+                      />
+                    </label>
+                    <button className="px-3 py-1 border-2 border-red-600 text-center hover:bg-red-600 hover:text-white rounded" type="submit">Update</button>
+                  </form>
+                </div>
               </div>
             ))
           ) : (
             <p>No daily report available</p>
           )}
         </div>
-        
       </div>
+
     </div>
   );
 }

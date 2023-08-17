@@ -8,13 +8,22 @@ export default function SignupForm() {
   const [rName, setRestaurantName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   if (currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/user" />;
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Check if password and confirmation match
+    if (password !== confirmPassword) {
+      setPasswordsMatch(false);
+      return;
+    }
+
     const credentials = {
       username,
       rName,
@@ -24,7 +33,13 @@ export default function SignupForm() {
     await signup(credentials);
   };
 
-  const isFormValid = username !== "" && rName !== "" && email !== "" && password !== "";
+  const isFormValid =
+    username !== "" &&
+    rName !== "" &&
+    email !== "" &&
+    password !== "" &&
+    confirmPassword !== "" &&
+    passwordsMatch;
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -57,6 +72,7 @@ export default function SignupForm() {
                   className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
+
               <fieldset className="flex flex-col mb-2">
                 <label htmlFor="rName">Restaurant Name</label>
                 <input
@@ -68,6 +84,7 @@ export default function SignupForm() {
                   className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
+
               <fieldset className="flex flex-col mb-2">
                 <label htmlFor="email">Email</label>
                 <input
@@ -79,6 +96,7 @@ export default function SignupForm() {
                   className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
+
               <fieldset className="flex flex-col mb-2">
                 <label htmlFor="password">Password</label>
                 <input
@@ -90,16 +108,39 @@ export default function SignupForm() {
                   className="bg-white border-2 border-gray-950 focus:outline-none p-2"
                 />
               </fieldset>
+
+              <fieldset className="flex flex-col mb-2">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setPasswordsMatch(true); // Reset the match state when typing
+                  }}
+                  className={`${passwordsMatch
+                      ? "bg-white border-2 border-gray-950 focus:outline-none p-2"
+                      : "bg-red-100 border-2 border-red-500 focus:outline-none p-2"
+                    }`}
+                />
+                {!passwordsMatch && confirmPassword.length > 0 && (
+                  <p className="text-red-500 mt-1">Passwords do not match.</p>
+                )}
+              </fieldset>
+
               <button
                 className={`${isFormValid
-                    ? "bg-red-500 hover:bg-red-600"
-                    : "bg-gray-300"
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-gray-300"
                   } text-white font-bold py-2 px-4 mt-4 rounded-full`}
                 style={{ border: "none" }}
                 disabled={!isFormValid}
               >
                 Sign Up
               </button>
+
             </form>
             <p className="mt-4 text-center">
               Already a member?{" "}
