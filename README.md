@@ -51,5 +51,3 @@ Special thanks and credit to the main contributors to the project:
 
 
 https://github.com/ErlisI/Runner/assets/63165733/64d0dd64-b3b4-435f-9138-648efccf7f14
-
-https://github.com/ErlisI/Runner/assets/63165733/42606528-c982-4179-bb07-aa82cbed459d
